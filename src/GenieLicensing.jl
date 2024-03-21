@@ -2,7 +2,7 @@ module GenieLicensing
 
 using HTTP, JSON, Logging
 
-const LICENSE_API = get!(ENV, "GENIE_LICENSE_API", "http://localhost:8000")
+const LICENSE_API = get!(ENV, "GENIE_LICENSE_API", "https://licensing.hosting.genieframework.com/")
 const USER_EMAIL = get!(ENV, "GENIE_USER_EMAIL", "__UNKNWON__@genieframework.com")
 const USER_FULL_NAME = get!(ENV, "GENIE_USER_FULL_NAME", "Unknown User")
 const ORIGIN = get!(ENV, "GENIE_ORIGIN", "Unknown")
@@ -33,7 +33,7 @@ function start_session()
   end
 end
 
-function log(origin, payload::AbstractDict)
+function log(origin, type, payload::AbstractDict)
   if ENV["GENIE_SESSION"] == ""
     @info("No session found, skipping logging")
     return
@@ -44,7 +44,8 @@ function log(origin, payload::AbstractDict)
               body = Dict(
                 "session_hash" => get(ENV, "GENIE_SESSION", "Unknown"),
                 "origin" => origin,
-                "payload" => payload |> JSON.json
+                "type" => type,
+                "metadata" => payload |> JSON.json
               ),
               status_exception = false
     )
