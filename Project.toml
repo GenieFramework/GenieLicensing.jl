@@ -1,7 +1,7 @@
 name = "GenieLicensing"
 uuid = "053420ac-561e-47bc-88a1-f3908d4a7fc1"
 authors = ["Adrian Salceanu <adrian.salceanu@gmail.com> and contributors"]
-version = "1.0.0-DEV"
+version = "1.0.1-DEV"
 
 [deps]
 HTTP = "cd3eb016-35fb-5094-929b-558a96fad6f3"

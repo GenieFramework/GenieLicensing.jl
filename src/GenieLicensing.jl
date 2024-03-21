@@ -2,7 +2,7 @@ module GenieLicensing
 
 using HTTP, JSON, Logging
 
-const LICENSE_API = get!(ENV, "GENIE_LICENSE_API", "https://licensing.hosting.genieframework.com/")
+const LICENSE_API = get!(ENV, "GENIE_LICENSE_API", "https://licensing.hosting.genieframework.com") # no trailing slash
 const USER_EMAIL = get!(ENV, "GENIE_USER_EMAIL", "__UNKNWON__@genieframework.com")
 const USER_FULL_NAME = get!(ENV, "GENIE_USER_FULL_NAME", "Unknown User")
 const ORIGIN = get!(ENV, "GENIE_ORIGIN", "Unknown")
@@ -27,6 +27,7 @@ function start_session()
   end
 
   if session_data.status != 200
+    @error("Failed to start session: $(session_data.body |> String)")
     ENV["GENIE_SESSION"] = ""
   else
     ENV["GENIE_SESSION"] = (session_data.body |> String |> JSON.parse)["session"]["id"]
