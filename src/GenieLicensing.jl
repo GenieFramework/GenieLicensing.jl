@@ -87,8 +87,6 @@ function __init__() #TODO: uncouple this
   if get(ENV, "JULIAHUB_APP_URL", "") != ""
     ENV["GENIE_METADATA"] = ENV["JULIAHUB_APP_URL"]
   end
-
-  start_session()
 end
 
 
