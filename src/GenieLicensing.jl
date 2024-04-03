@@ -1,6 +1,6 @@
 module GenieLicensing
 
-using HTTP, JSON, Logging
+using HTTP, JSON, Logging, Retry
 
 const LICENSE_API = get!(ENV, "GENIE_LICENSE_API", "https://licensing.hosting.genieframework.com") # no trailing slash
 const USER_EMAIL = get!(ENV, "GENIE_USER_EMAIL", "__UNKNWON__@genieframework.com")
@@ -10,15 +10,20 @@ const METADATA = get!(ENV, "GENIE_METADATA", "")
 
 function start_session()
   session_data = try
-    HTTP.post( LICENSE_API * "/sessions/create";
-              body = Dict(
-                "email" => USER_EMAIL,
-                "name"  => USER_FULL_NAME,
-                "origin" => ORIGIN,
-                "metadata" => Dict("app_url" => METADATA) |> JSON.json
-              ),
-              status_exception = false
-            )
+    @repeat 10 try
+      HTTP.post( LICENSE_API * "/sessions/create";
+                body = Dict(
+                  "email" => USER_EMAIL,
+                  "name"  => USER_FULL_NAME,
+                  "origin" => ORIGIN,
+                  "metadata" => Dict("app_url" => METADATA) |> JSON.json
+                ),
+                status_exception = true
+              )
+    catch ex
+      @error("Failed to start session: $ex")
+      @delay_retry if true end
+    end
   catch ex
     @error("Failed to start session: $ex")
     ENV["GENIE_SESSION"] = ""

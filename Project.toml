@@ -1,14 +1,18 @@
 name = "GenieLicensing"
 uuid = "053420ac-561e-47bc-88a1-f3908d4a7fc1"
 authors = ["Adrian Salceanu <adrian.salceanu@gmail.com> and contributors"]
-version = "1.0.1-DEV"
+version = "1.0.2-DEV"
 
 [deps]
 HTTP = "cd3eb016-35fb-5094-929b-558a96fad6f3"
 JSON = "682c06a0-de6a-54ab-a142-c8b1cf79cde6"
 Logging = "56ddb016-857b-54e1-b83d-db4d58db5568"
+Retry = "20febd7b-183b-5ae2-ac4a-720e7ce64774"
 
 [compat]
+HTTP = "1.10.5"
+JSON = "0.21.4"
+Retry = "0.4.1"
 julia = "1.6"
 
 [extras]
